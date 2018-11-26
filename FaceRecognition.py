@@ -408,7 +408,7 @@ class Place:
 	
         dst = cv2.add(roi_bg,roi_fg)
 
-          frame[y1:y2,x1:x2] = dst
+        frame[y1:y2,x1:x2] = dst
 
 
 
