@@ -37,61 +37,55 @@ predictor = dlib.shape_predictor(PREDICTOR_PATH)
 face_landmarks = []
 process_this_frame = True
 video_capture = cv2.VideoCapture(0)
+print("FACE FILTER ACTIVATING...")
+print("FACE FILTERS ACTIVATED")
 
 while True:
-    print("FACE FILTER ACTIVATING...")
-    print("FACE FILTER ACTIVATED")
-	ret, frame = video_capture.read()
-	small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-	rgb_small_frame = small_frame[...,::-1]
+    ret, frame = video_capture.read()
+    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+    rgb_small_frame = small_frame[...,::-1]
 	
-	if process_this_frame:
-		gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+    if process_this_frame:
+        gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 		#cv2.imshow("",gray)
-		rects = detector(gray,0)
+        rects = detector(gray,0)
 
-		for rect in rects:
-			x = rect.left()
-			y = rect.top()
-			x1 = rect.right()
-			y1 = rect.bottom()
-
-			landmarks = np.matrix([[p.x,p.y] for p in predictor(frame,rect).parts()])
-			#print (landmarks)
-			
-			
-			left_eye = landmarks[LEFT_EYE_POINTS]
-			right_eye = landmarks[RIGHT_EYE_POINTS]
-			#print(left_eye)
-			lip = landmarks[MOUTH_OUTLINE_POINTS]
-			face = landmarks[FACE_POINTS]
-			beard = landmarks[JAWLINE_POINTS]
-			nosetip = landmarks[NOSETIP_POINTS]
-
-			lipSize, lipCenter = cal.lip_size(lip)
-			noseSize, noseCenter = cal.nosetip_size(nosetip)
-			leftEyeSize, leftEyeCenter = cal.eye_size(left_eye)
-			rightEyeSize, rightEyeCenter = cal.eye_size(right_eye)
-			faceSize, faceCenter = cal.face_size(face)
-			beardSize, beardCenter = cal.beard_size(beard)
-			Place.nosetip(frame,noseCenter,noseSize)
-			#print ("Left - Eye Coordinates")
-			#Place.left_eye(frame,leftEyeCenter,leftEyeSize)
-			Place.cheeks(frame,beardCenter,beardSize)
-			#print ("Right - Eye Coordinates")
-			#Place.right_eye(frame,rightEyeCenter,rightEyeSize)
-			Place.face(frame,faceCenter,faceSize)
-			#Place.lip(frame,lipCenter,lipSize)
-			Place.head(frame,faceCenter,faceSize)
-
-
-		cv2.imshow("Faces with Overlay",frame)
-
-	ch = 0xFF & cv2.waitKey(1)
-
-	if ch == ord('q'):
-		print("SHUTTING DOWN...")
-		break
+        for rect in rects:
+            x = rect.left()
+            y = rect.top()
+            x1 = rect.right()
+            y1 = rect.bottom()
+            
+            landmarks = np.matrix([[p.x,p.y] for p in predictor(frame,rect).parts()])
+            #print (landmarks)
+            left_eye = landmarks[LEFT_EYE_POINTS]
+            right_eye = landmarks[RIGHT_EYE_POINTS]
+            #print(left_eye)
+            lip = landmarks[MOUTH_OUTLINE_POINTS]
+            face = landmarks[FACE_POINTS]
+            beard = landmarks[JAWLINE_POINTS]
+            nosetip = landmarks[NOSETIP_POINTS]
+            
+            lipSize, lipCenter = cal.lip_size(lip)
+            noseSize, noseCenter = cal.nosetip_size(nosetip)
+            leftEyeSize, leftEyeCenter = cal.eye_size(left_eye)
+            rightEyeSize, rightEyeCenter = cal.eye_size(right_eye)
+            faceSize, faceCenter = cal.face_size(face)
+            beardSize, beardCenter = cal.beard_size(beard)
+            Place.nosetip(frame,noseCenter,noseSize)
+            #print ("Left - Eye Coordinates")
+            #Place.left_eye(frame,leftEyeCenter,leftEyeSize)
+            Place.cheeks(frame,beardCenter,beardSize)
+            #print ("Right - Eye Coordinates")
+            #Place.right_eye(frame,rightEyeCenter,rightEyeSize)
+            Place.face(frame,faceCenter,faceSize)
+            #Place.lip(frame,lipCenter,lipSize)
+            Place.head(frame,faceCenter,faceSize)
+        cv2.imshow("Faces with Overlay",frame)
+    ch = 0xFF & cv2.waitKey(1)
+    if ch == ord('q'):
+        print("SHUTTING DOWN...")
+        break
 cv2.destroyAllWindows()
 
 
