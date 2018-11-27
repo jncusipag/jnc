@@ -1,1 +1,2 @@
-# jnc
+JEWEL N. CUSIPAG
+THQR2
