@@ -8,8 +8,8 @@ from threading import Thread
 import face_recognition
 from os import listdir
 from os.path import isfile, join
-from faceRecognition import Calculate as cal
-from faceRecognition import Place
+from FaceRecognition import Calculate as cal
+from FaceRecognition import Place
 
 PREDICTOR_PATH = "shape_predictor_68_face_landmarks.dat"
 
